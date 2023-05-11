@@ -1,22 +1,9 @@
 ## Starting Development
 
-Start the app in the `dev` environment:
+WORK IN PROGRESS
 
-```bash
-npm start
-```
-
-## Packaging for Production
-
-To package apps for the local platform:
-
-```bash
-npm run package
-```
-
-## Docs
-
-See our [docs and guides here](https://electron-react-boilerplate.js.org/docs/installation)
+Follow
+https://demo.tailadmin.com/file-manager
 
 ## TODOs
 
