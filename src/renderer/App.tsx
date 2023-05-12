@@ -4,52 +4,30 @@ import {
   Route,
   useNavigate,
 } from 'react-router-dom';
-import icon from '../../assets/icon.svg';
 import './App.css';
+import logo from '../../assets/icon.png';
 import NewSession from './screens/newSession';
 
 function Hello() {
   const navigate = useNavigate();
   return (
     <>
-      <div className="Hello">
-        <img width="200" alt="icon" src={icon} />
-      </div>
-      <h1>electron-react-boilerplate</h1>
-      <div className="Hello">
-        <button type="button" onClick={() => window.darkMode.toggle()}>
-          <span role="img" aria-label="books">
-            📚
-          </span>
-          TOGGLE MODE
-        </button>
-
-        <button type="button" onClick={() => navigate('/newSession')}>
-          <span role="img" aria-label="folded hands">
-            🙏
-          </span>
-          New Session
-        </button>
-      </div>
+      <button type="button" onClick={() => navigate('/newSession')}>
+        <span role="img" aria-label="folded hands">
+          🙏
+        </span>
+        New Session
+      </button>
       <h1 className="text-3xl font-bold">Hello world!</h1>
 
-      <div className="bg-white dark:bg-slate-800 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl">
+      <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div>
-          <span className="inline-flex items-center justify-center p-2 bg-indigo-500 rounded-md shadow-lg">
-            <svg
-              className="h-6 w-6 text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            />
-          </span>
+          <span className="inline-flex items-center justify-center p-2 bg-indigo-500 rounded-md shadow-lg" />
         </div>
         <h3 className="text-slate-900 dark:text-white mt-5 text-base font-medium tracking-tight">
           Writes Upside-Down
         </h3>
-        <p className="text-slate-500 dark:text-slate-400 mt-2 text-sm">
+        <p className="text-sm font-medium">
           The Zero Gravity Pen can be used to write in any orientation,
           including upside-down. It even works in outer space.
         </p>
@@ -61,21 +39,12 @@ function Hello() {
 export default function App() {
   return (
     <>
-      <header className="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 mb-4">
+      <header className="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
         <div className="flex flex-grow items-center justify-between py-4 px-4 shadow-2 md:px-6 2xl:px-11">
           <div className="flex items-center gap-2 sm:gap-4 lg:hidden">
-            <a className="block flex-shrink-0 lg:hidden" href="index.html">
-              <img src="src/images/logo/logo-icon.svg" alt="Logo" />
+            <a className="block flex-shrink-0 lg:hidden" href="#">
+              <img src={logo} className="h-8" alt="Logo" />
             </a>
-          </div>
-          <div className="hidden sm:block">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Type to search..."
-                className="w-full xl:w-125 bg-transparent pr-4 pl-9 focus:outline-none"
-              />
-            </div>
           </div>
 
           <label className="relative m-0 block h-7.5 w-14 rounded-full bg-primary">
