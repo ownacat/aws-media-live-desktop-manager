@@ -2,7 +2,10 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./src/**/*.{html,js,ts,tsx,jsx}'],
+  content: [
+    './src/**/*.{html,js,ts,tsx,jsx}',
+    './node_modules/flowbite/**/*.js',
+  ],
   darkMode: 'media',
   theme: {
     fontFamily: {
@@ -291,5 +294,5 @@ module.exports = {
     },
   },
 
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [require('@tailwindcss/forms'), require('flowbite/plugin')],
 };

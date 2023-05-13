@@ -1,64 +1,56 @@
-import { useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
+import Button from 'ui/button/button';
+import Input from 'ui/input/input';
 
 export default function NewSession() {
-  const navigate = useNavigate();
+  const refArn = useRef<HTMLInputElement>(null);
+  const refToken = useRef<HTMLInputElement>(null);
+  const refSecret = useRef<HTMLInputElement>(null);
+
+  const submit = async () => {
+    console.log(refArn.current?.value);
+  };
+
   return (
-    <div className="flex min-h-full flex-col justify-center px-6 py-12  dark:bg-boxdark bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
+    <div className="relative flex min-h-full flex-col justify-center px-6 py-12  dark:bg-boxdark bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 dark:text-white">
           New session
         </h2>
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form className="space-y-6" action="#" method="POST">
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              AWS TOKEN
-            </label>
-            <div className="mt-2">
-              <input
-                id="email"
-                name="email"
-                type="text"
-                required
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
+          <Input
+            id="arn"
+            ref={refArn}
+            label="MEDIA STORE ARN"
+            type="text"
+            placeholder="arn:aws:mediastore:us-east-1:123456789012:container/mycontainer"
+            required
+          />
 
-          <div>
-            <div className="flex items-center justify-between">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                AWS SECRET
-              </label>
-            </div>
-            <div className="mt-2">
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-              />
-            </div>
-          </div>
+          <Input
+            id="token"
+            ref={refToken}
+            label="AWS TOKEN"
+            type="text"
+            placeholder="TOKEN"
+            required
+          />
 
-          <div>
-            <button
-              type="submit"
-              className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 font-medium text-white transition hover:bg-opacity-90"
-            >
-              START NEW SESSION
-            </button>
-          </div>
+          <Input
+            id="secret"
+            ref={refSecret}
+            label="AWS SECRET"
+            type="password"
+            placeholder="*********"
+            required
+          />
+
+          <Button.Primary onClick={submit} className="w-full ">
+            START NEW SESSION
+          </Button.Primary>
         </form>
       </div>
     </div>
