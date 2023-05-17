@@ -12,19 +12,21 @@ const initialState: AtuhState = {
   awsSecret: null,
 };
 
-const authenticate: CaseReducer<AtuhState, PayloadAction<string>> = (
+const authenticateAction: CaseReducer<AtuhState, PayloadAction<AtuhState>> = (
   state,
   action
 ) => {
-  state.arn = action.payload;
+  state.arn = action.payload.arn;
+  state.awsToken = action.payload.awsToken;
+  state.awsSecret = action.payload.awsSecret;
 };
 
 const auth = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    authenticate,
+    authenticate: authenticateAction,
   },
 });
-
+export const { authenticate } = auth.actions;
 export default auth;

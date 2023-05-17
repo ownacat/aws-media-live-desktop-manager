@@ -89,6 +89,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-mediastore-data": "^3.332.0",
+    "@aws-sdk/middleware-signing": "^3.329.0",
     "@reduxjs/toolkit": "^1.9.5",
     "electron-debug": "^3.2.0",
     "electron-log": "^4.4.8",
@@ -96,7 +97,9 @@
     "flowbite": "^1.6.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.8.1"
+    "react-redux": "^8.0.5",
+    "react-router-dom": "^6.8.1",
+    "redux-logger": "^3.0.6"
   },
   "devDependencies": {
     "@electron/notarize": "^1.2.3",
@@ -113,6 +116,7 @@
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@types/react-test-renderer": "^18.0.0",
+    "@types/redux-logger": "^3.0.9",
     "@types/terser-webpack-plugin": "^5.0.4",
     "@types/webpack-bundle-analyzer": "^4.6.0",
     "@typescript-eslint/eslint-plugin": "^5.51.0",

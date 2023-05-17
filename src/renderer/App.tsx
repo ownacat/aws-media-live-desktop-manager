@@ -5,8 +5,10 @@ import {
   useNavigate,
 } from 'react-router-dom';
 import './App.css';
+import { Provider } from 'react-redux';
 import logo from '../../assets/icon.png';
 import NewSession from './screens/newSession';
+import store from '../config/store';
 
 function Hello() {
   const navigate = useNavigate();
@@ -38,7 +40,7 @@ function Hello() {
 
 export default function App() {
   return (
-    <>
+    <Provider store={store}>
       <header className="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
         <div className="flex flex-grow items-center justify-between py-4 px-4 shadow-2 md:px-6 2xl:px-11">
           <div className="flex items-center gap-2 sm:gap-4 lg:hidden">
@@ -97,6 +99,6 @@ export default function App() {
           <Route path="/newSession" element={<NewSession />} />
         </Routes>
       </Router>
-    </>
+    </Provider>
   );
 }

@@ -1,14 +1,28 @@
 import { useRef } from 'react';
 import Button from 'ui/button/button';
 import Input from 'ui/input/input';
+import { useDispatch } from 'react-redux';
+import { authenticate } from 'store/auth';
+import { verify } from 'api/awsMediaStore';
 
 export default function NewSession() {
+  const dispatch = useDispatch();
   const refArn = useRef<HTMLInputElement>(null);
   const refToken = useRef<HTMLInputElement>(null);
   const refSecret = useRef<HTMLInputElement>(null);
 
   const submit = async () => {
-    console.log(refArn.current?.value);
+    verify(
+      refToken.current?.value as string,
+      refSecret.current?.value as string
+    );
+    dispatch(
+      authenticate({
+        arn: refArn.current?.value as string,
+        awsSecret: refSecret.current?.value as string,
+        awsToken: refToken.current?.value as string,
+      })
+    );
   };
 
   return (
