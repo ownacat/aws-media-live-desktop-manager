@@ -1,13 +1,13 @@
 import { CaseReducer, PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 type AtuhState = {
-  arn: string | null;
+  endpoint: string | null;
   awsToken: string | null;
   awsSecret: string | null;
 };
 
 const initialState: AtuhState = {
-  arn: null,
+  endpoint: null,
   awsToken: null,
   awsSecret: null,
 };
@@ -16,7 +16,7 @@ const authenticateAction: CaseReducer<AtuhState, PayloadAction<AtuhState>> = (
   state,
   action
 ) => {
-  state.arn = action.payload.arn;
+  state.endpoint = action.payload.endpoint;
   state.awsToken = action.payload.awsToken;
   state.awsSecret = action.payload.awsSecret;
 };

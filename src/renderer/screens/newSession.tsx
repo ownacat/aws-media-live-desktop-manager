@@ -7,22 +7,27 @@ import { verify } from 'api/awsMediaStore';
 
 export default function NewSession() {
   const dispatch = useDispatch();
-  const refArn = useRef<HTMLInputElement>(null);
+  const refEndpoint = useRef<HTMLInputElement>(null);
   const refToken = useRef<HTMLInputElement>(null);
   const refSecret = useRef<HTMLInputElement>(null);
 
   const submit = async () => {
-    verify(
-      refToken.current?.value as string,
-      refSecret.current?.value as string
-    );
-    dispatch(
-      authenticate({
-        arn: refArn.current?.value as string,
-        awsSecret: refSecret.current?.value as string,
-        awsToken: refToken.current?.value as string,
-      })
-    );
+    // TODO TEMP
+
+    const endpoint = refEndpoint.current?.value as string;
+    const awsToken = refToken.current?.value as string;
+    const awsSecret = refSecret.current?.value as string;
+
+    const success = await verify(awsToken, awsSecret, endpoint);
+    if (success) {
+      dispatch(
+        authenticate({
+          endpoint,
+          awsSecret,
+          awsToken,
+        })
+      );
+    }
   };
 
   return (
@@ -33,14 +38,14 @@ export default function NewSession() {
         </h2>
       </div>
 
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-lg">
         <form className="space-y-6" action="#" method="POST">
           <Input
-            id="arn"
-            ref={refArn}
-            label="MEDIA STORE ARN"
+            id="endpoint"
+            ref={refEndpoint}
+            label="Container Endpoint"
             type="text"
-            placeholder="arn:aws:mediastore:us-east-1:123456789012:container/mycontainer"
+            placeholder="https://tv5kdp1zg6s76b.data.mediastore.eu-central-1.amazonaws.com"
             required
           />
 
@@ -49,7 +54,7 @@ export default function NewSession() {
             ref={refToken}
             label="AWS TOKEN"
             type="text"
-            placeholder="TOKEN"
+            placeholder="AKIA3TO1G7LKZZCC3Y5G"
             required
           />
 
@@ -58,7 +63,7 @@ export default function NewSession() {
             ref={refSecret}
             label="AWS SECRET"
             type="password"
-            placeholder="*********"
+            placeholder="Qtfa1DWxCvGzC2gFUVipQjt++kMmKztAXiGW5I7l"
             required
           />
 
