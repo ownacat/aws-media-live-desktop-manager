@@ -2,6 +2,7 @@ import {
   MediaStoreDataClient,
   ListItemsCommand,
   Item,
+  ListItemsCommandInput,
 } from '@aws-sdk/client-mediastore-data';
 
 function endpointToRegion(endpoint: string): string {
@@ -46,19 +47,24 @@ class AwsMediaStore {
       throw new Error('Not authenticated');
     }
 
-    const input = {
-      MaxResults: 100,
-      Path: path,
-    };
+    let response = null;
+    let results: Item[] = [];
     try {
-      const command = new ListItemsCommand(input);
-      const response = await this.client.send(command);
+      do {
+        const input: ListItemsCommandInput = {
+          MaxResults: 500,
+          Path: path,
+          NextToken: response?.NextToken ?? undefined,
+        };
+        const command = new ListItemsCommand(input);
+        // eslint-disable-next-line no-await-in-loop
+        response = await this.client.send(command);
+        if (response.Items) {
+          results = results.concat(response.Items);
+        }
+      } while (response && response.NextToken);
 
-      // TODO paging
-      if (response.Items) {
-        return response.Items;
-      }
-      return [];
+      return results;
     } catch (e) {
       return [];
     }

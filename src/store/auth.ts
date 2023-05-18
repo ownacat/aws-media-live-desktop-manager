@@ -21,12 +21,19 @@ const authenticateAction: CaseReducer<AtuhState, PayloadAction<AtuhState>> = (
   state.awsSecret = action.payload.awsSecret;
 };
 
+const logoutAction: CaseReducer<AtuhState> = (state) => {
+  state.endpoint = null;
+  state.awsToken = null;
+  state.awsSecret = null;
+};
+
 const auth = createSlice({
   name: 'auth',
   initialState,
   reducers: {
     authenticate: authenticateAction,
+    logout: logoutAction,
   },
 });
-export const { authenticate } = auth.actions;
+export const { authenticate, logout } = auth.actions;
 export default auth.reducer;

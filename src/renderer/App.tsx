@@ -5,50 +5,32 @@ import {
   useNavigate,
 } from 'react-router-dom';
 import './App.css';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
+import { useEffect, useRef } from 'react';
+import { isAuthenciatedSelector } from 'selectors/auth';
 import logo from '../../assets/icon.png';
 import NewSession from './screens/newSession';
 import store from '../config/store';
 import Browser from './screens/browser';
+import Logout from './screens/logout';
 
-function Hello() {
+function Wrapper() {
   const navigate = useNavigate();
+  const isAuthenticated = useSelector(isAuthenciatedSelector);
+  const previsAuthenticated = useRef<boolean>();
+
+  useEffect(() => {
+    if (!isAuthenticated && previsAuthenticated.current) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    previsAuthenticated.current = isAuthenticated;
+  }, [isAuthenticated]);
+
   return (
     <>
-      <button type="button" onClick={() => navigate('/newSession')}>
-        <span role="img" aria-label="folded hands">
-          🙏
-        </span>
-        New Session
-      </button>
-
-      <button type="button" onClick={() => navigate('/browser')}>
-        <span role="img" aria-label="folded hands">
-          🙏
-        </span>
-        BROWSER
-      </button>
-      <h1 className="text-3xl font-bold">Hello world!</h1>
-
-      <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <div>
-          <span className="inline-flex items-center justify-center p-2 bg-indigo-500 rounded-md shadow-lg" />
-        </div>
-        <h3 className="text-slate-900 dark:text-white mt-5 text-base font-medium tracking-tight">
-          Writes Upside-Down
-        </h3>
-        <p className="text-sm font-medium">
-          The Zero Gravity Pen can be used to write in any orientation,
-          including upside-down. It even works in outer space.
-        </p>
-      </div>
-    </>
-  );
-}
-
-export default function App() {
-  return (
-    <Provider store={store}>
       <header className="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
         <div className="flex flex-grow items-center justify-between py-4 px-4 shadow-2 md:px-6 2xl:px-11">
           <div className="flex items-center gap-2 sm:gap-4 lg:hidden">
@@ -99,14 +81,23 @@ export default function App() {
               </span>
             </span>
           </label>
+          <Logout />
         </div>
       </header>
+
+      <Routes>
+        <Route path="/" element={<NewSession />} />
+        <Route path="/browser" element={<Browser />} />
+      </Routes>
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <Provider store={store}>
       <Router>
-        <Routes>
-          <Route path="/" element={<Hello />} />
-          <Route path="/newSession" element={<NewSession />} />
-          <Route path="/browser" element={<Browser />} />
-        </Routes>
+        <Wrapper />
       </Router>
     </Provider>
   );
