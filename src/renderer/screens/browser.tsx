@@ -27,11 +27,13 @@ export default function Browser() {
   const renderFileRow = (file: FileItem) => {
     return (
       <tr
-        key={file.ETag}
+        key={file.Type === 'FOLDER' ? file.Name : file.ETag}
         className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
       >
         <td className="px-6 py-4 flex space-x-1 items-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
-          {file.Type === 'FOLDER' ? <FolderIcon /> : null}
+          {file.Type === 'FOLDER' ? (
+            <FolderIcon path={file.Name as string} />
+          ) : null}
           <span>{file.Name}</span>
         </td>
         <td className="px-6 py-4">

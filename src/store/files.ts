@@ -92,7 +92,9 @@ const auth = createSlice<FilesState, SliceCaseReducers<FilesState>>({
       );
       state.loading = false;
     });
-    builder.addCase(fetchFilesByPath.pending, (state) => {
+    builder.addCase(fetchFilesByPath.pending, (state, action) => {
+      const path = action.meta.arg;
+      state.path = path;
       state.loading = true;
     });
   },

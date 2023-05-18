@@ -34,12 +34,12 @@ function Wrapper() {
       <header className="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
         <div className="flex flex-grow items-center justify-between py-4 px-4 shadow-2 md:px-6 2xl:px-11">
           <div className="flex items-center gap-2 sm:gap-4 lg:hidden">
-            <a className="block flex-shrink-0 lg:hidden" href="#">
-              <img src={logo} className="h-8" alt="Logo" />
-            </a>
+            <span className="font-semibold text-gray-900 dark:text-white">
+              AWS MediaStore Browser
+            </span>
           </div>
 
-          <label className="relative m-0 block h-7.5 w-14 rounded-full bg-primary">
+          {/* <label className="relative m-0 block h-7.5 w-14 rounded-full bg-primary">
             <input
               type="checkbox"
               value="darkMode"
@@ -80,7 +80,7 @@ function Wrapper() {
                 </svg>
               </span>
             </span>
-          </label>
+  </label> */}
           <Logout />
         </div>
       </header>

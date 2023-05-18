@@ -1,12 +1,25 @@
-export default function FolderIcon() {
+import { fetchFilesByPath } from 'actions/files';
+import { AppDispatch } from 'config/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { pathSelector } from 'selectors/files';
+
+export default function FolderIcon({ path }: { path: string }) {
+  const dispatch = useDispatch<AppDispatch>();
+  const currentPath = useSelector(pathSelector);
+
+  function onClick() {
+    dispatch(fetchFilesByPath(`${currentPath + path}/`));
+  }
+
   return (
     <svg
+      onClick={onClick}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className="w-6 h-6"
+      className="w-6 h-6 cursor-pointer"
     >
       <path
         strokeLinecap="round"
