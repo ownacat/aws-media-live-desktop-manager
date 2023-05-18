@@ -3,22 +3,26 @@ import Button from 'ui/button/button';
 import Input from 'ui/input/input';
 import { useDispatch } from 'react-redux';
 import { authenticate } from 'store/auth';
-import { verify } from 'api/awsMediaStore';
+import awsMediaStore from 'api/awsMediaStore';
+import { useNavigate } from 'react-router-dom';
 
 export default function NewSession() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const refEndpoint = useRef<HTMLInputElement>(null);
   const refToken = useRef<HTMLInputElement>(null);
   const refSecret = useRef<HTMLInputElement>(null);
 
   const submit = async () => {
-    // TODO TEMP
-
     const endpoint = refEndpoint.current?.value as string;
     const awsToken = refToken.current?.value as string;
     const awsSecret = refSecret.current?.value as string;
 
-    const success = await verify(awsToken, awsSecret, endpoint);
+    const success = await awsMediaStore.authenticate(
+      awsSecret,
+      awsToken,
+      endpoint
+    );
     if (success) {
       dispatch(
         authenticate({
@@ -27,6 +31,7 @@ export default function NewSession() {
           awsToken,
         })
       );
+      navigate('/browser');
     }
   };
 

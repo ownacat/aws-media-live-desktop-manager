@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import logo from '../../assets/icon.png';
 import NewSession from './screens/newSession';
 import store from '../config/store';
+import Browser from './screens/browser';
 
 function Hello() {
   const navigate = useNavigate();
@@ -19,6 +20,13 @@ function Hello() {
           🙏
         </span>
         New Session
+      </button>
+
+      <button type="button" onClick={() => navigate('/browser')}>
+        <span role="img" aria-label="folded hands">
+          🙏
+        </span>
+        BROWSER
       </button>
       <h1 className="text-3xl font-bold">Hello world!</h1>
 
@@ -97,6 +105,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Hello />} />
           <Route path="/newSession" element={<NewSession />} />
+          <Route path="/browser" element={<Browser />} />
         </Routes>
       </Router>
     </Provider>
