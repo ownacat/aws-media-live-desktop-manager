@@ -8,7 +8,6 @@ export default function CurrentPath() {
   const path = useSelector(pathSelector);
 
   function goBack(): void {
-    console.log(path.split('/'));
     if (path.split('/').length <= 2) return;
     const newPath = `${path.split('/').slice(0, -2).join('/')}/`;
 
@@ -20,7 +19,7 @@ export default function CurrentPath() {
       <button
         onClick={goBack}
         type="button"
-        className="absolute left-1 bottom-1 text-blue border border-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500"
+        className="absolute left-0.5 bottom-0.5 text-blue border border-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-1 text-center inline-flex items-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -43,7 +42,7 @@ export default function CurrentPath() {
       <input
         type="search"
         id="search"
-        className="block w-full p-4 pl-16 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        className="block w-full p-2 pl-12 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         value={path}
         disabled
         required

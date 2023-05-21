@@ -5,6 +5,7 @@ type Props = {
   children: React.ReactNode;
   className?: string;
   loading?: boolean;
+  disabled?: boolean;
 };
 
 const loadingAnimation = (
@@ -27,11 +28,17 @@ const loadingAnimation = (
   </svg>
 );
 
-function Primary({ onClick, children, className, loading }: Props) {
+function Primary({ onClick, disabled, children, className, loading }: Props) {
   const combinedClassName = [];
+
   combinedClassName.push(
-    'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'
+    'text-white bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 disabled:opacity-25'
   );
+  if (!disabled) {
+    combinedClassName.push(
+      'hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 '
+    );
+  }
   if (loading) {
     combinedClassName.push('cursor-not-allowed');
   }
@@ -44,7 +51,7 @@ function Primary({ onClick, children, className, loading }: Props) {
       type="button"
       onClick={onClick}
       className={combinedClassName.join(' ')}
-      disabled={loading}
+      disabled={loading || disabled}
     >
       {loading ? loadingAnimation : null}
       {children}
@@ -54,9 +61,10 @@ function Primary({ onClick, children, className, loading }: Props) {
 Primary.defaultProps = {
   className: '',
   loading: false,
+  disabled: false,
 };
 
-function Secondary({ onClick, children, className, loading }: Props) {
+function Secondary({ onClick, children, className, loading, disabled }: Props) {
   let combinedClassName =
     'text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800';
   combinedClassName += loading ? ' cursor-not-allowed' : '';
@@ -66,7 +74,7 @@ function Secondary({ onClick, children, className, loading }: Props) {
       type="button"
       onClick={onClick}
       className={combinedClassName}
-      disabled={loading}
+      disabled={loading || disabled}
     >
       {loading ? loadingAnimation : null}
       {children}
@@ -76,6 +84,8 @@ function Secondary({ onClick, children, className, loading }: Props) {
 
 Secondary.defaultProps = {
   className: '',
+  loading: false,
+  disabled: false,
 };
 
 const Button = {
