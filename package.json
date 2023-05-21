@@ -173,7 +173,7 @@
     "webpack-merge": "^5.8.0"
   },
   "build": {
-    "productName": "AWS MediaStore GUI Client",
+    "productName": "AWS MediaStore Manager",
     "appId": "org.ownacat.AwsMediaStoreManager",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
