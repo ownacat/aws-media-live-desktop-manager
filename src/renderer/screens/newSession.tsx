@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { useEffect, useState } from 'react';
 import Button from 'ui/button/button';
 import Input from 'ui/input/input';
 import { useDispatch } from 'react-redux';
