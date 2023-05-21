@@ -1,14 +1,15 @@
-## Starting Development
-
-WORK IN PROGRESS
-
-Follow
-https://demo.tailadmin.com/file-manager
+##
 
 ## TODOs
 
-- [ ] UPDATE DEPEDENCIES
-- [ ] ADD THE UI
-- [ ] New Session Screen (AWS KEY , AWS SECRET)
-- [ ] Show the root folder of container UI
-- [ ] Close the session
+- [x] UPDATE DEPEDENCIES
+- [x] ADD THE UI
+- [x] New Session Screen (AWS KEY , AWS SECRET)
+- [x] Show the root folder of container UI
+- [x] Close the session
+- [x] Sorting table
+- [x] Navigate to folders
+- [x] Filter by name
+- [ ] Deploy installable version
+- [ ] Update Readme
+- [ ] Delete files
