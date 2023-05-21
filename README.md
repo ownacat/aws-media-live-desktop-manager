@@ -1,4 +1,6 @@
-##
+## AWS MEDIA STORE Manager
+
+Simple Application allowing you to easly browse AWS MediaStore files. As Amazon interface is unusable for that with this application you can browse the files the same way as using typical file manager.
 
 ## TODOs
 
