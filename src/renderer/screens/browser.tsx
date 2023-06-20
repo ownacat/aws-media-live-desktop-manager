@@ -34,8 +34,25 @@ export default function Browser() {
   };
 
   const renderFileRow = (file: FileItem) => {
-    if (searchFilter && file.Name && !file.Name.includes(searchFilter)) {
-      return null;
+    if (searchFilter && file.Name){
+      
+      if(searchFilter[0] === '/'){
+        try{
+        if(file.Name.match(new RegExp(searchFilter.slice(1)))  === null  ){
+            return null;
+        }
+      }catch(e){
+
+      }
+
+
+      }else{
+        if(!file.Name.includes(searchFilter)) {
+          return null;
+        }
+      }
+      
+      
     }
 
     return (
@@ -45,7 +62,9 @@ export default function Browser() {
       >
         <td className="px-6 py-4 flex space-x-1 items-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
           {file.Type === 'FOLDER' ? (
-            <FolderIcon path={file.Name as string} />
+            <FolderIcon path={file.Name as string} onClick={() => {
+              setSearchFilter(null);
+            }} />
           ) : null}
           <span>{file.Name}</span>
         </td>

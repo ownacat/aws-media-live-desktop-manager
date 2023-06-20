@@ -3,17 +3,18 @@ import { AppDispatch } from 'config/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { pathSelector } from 'selectors/files';
 
-export default function FolderIcon({ path }: { path: string }) {
+export default function FolderIcon({ path, onClick }: { path: string, onClick: () => void }) {
   const dispatch = useDispatch<AppDispatch>();
   const currentPath = useSelector(pathSelector);
 
-  function onClick() {
+  function onInternalClick(){
+    onClick();
     dispatch(fetchFilesByPath(`${currentPath + path}/`));
   }
 
   return (
     <svg
-      onClick={onClick}
+      onClick={onInternalClick}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
