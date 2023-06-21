@@ -4,7 +4,7 @@ import {
   SliceCaseReducers,
   createSlice,
 } from '@reduxjs/toolkit';
-import { FileItem, fetchFilesByPath } from 'actions/files';
+import { FileItem, calculateFolderSizeByPath, fetchFilesByPath } from 'actions/files';
 
 export type FileSortField = 'name' | 'size' | 'date';
 export type FileSortOrder = 'asc' | 'desc';
@@ -91,6 +91,20 @@ const auth = createSlice<FilesState, SliceCaseReducers<FilesState>>({
         sortFilesFunction(a, b, state.sortField, state.sortOrder)
       );
       state.loading = false;
+    });
+
+    builder.addCase(calculateFolderSizeByPath.fulfilled, (state, action) => {
+      const path = action.meta.arg;
+      const [totalCount, totalSize] = action.payload as number[];
+
+      state.files = state.files.map((file) => {
+        if(file.Name === path){
+            file.ContentLength = totalSize;
+            file.fileCount = totalCount;
+        }
+        return file;
+      });
+
     });
     builder.addCase(fetchFilesByPath.pending, (state, action) => {
       const path = action.meta.arg;

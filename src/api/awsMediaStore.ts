@@ -70,6 +70,52 @@ class AwsMediaStore {
     }
   }
 
+
+  public async caluculateSizeByPath(path: string): Promise<number[]> {
+    if (this.client === null) {
+      throw new Error('Not authenticated');
+    }
+
+    let response = null;
+    let totalSize: number = 0;
+    let totalCount: number = 0;
+    try {
+      do {
+        const input: ListItemsCommandInput = {
+          MaxResults: 500,
+          Path: path,
+          NextToken: response?.NextToken ?? undefined,
+        };
+        const command = new ListItemsCommand(input);
+        // eslint-disable-next-line no-await-in-loop
+        response = await this.client.send(command);
+        if (response.Items) {
+        
+            for(let i=0; i<response.Items.length; i++){
+                if(response.Items[i].Type === 'FOLDER'){
+                  const newPath = path + '/' + response.Items[i].Name ;
+                  const [folderSize, folderCount] = await this.caluculateSizeByPath(newPath);
+                  if(folderCount){
+                    totalSize += folderSize;
+                    totalCount += folderCount;
+                  }
+                }else if(response.Items[i].ContentLength){
+                  totalSize += response.Items[i].ContentLength as number;
+                  totalCount += 1;
+                }
+            }
+          
+
+        }
+      } while (response && response.NextToken);
+
+      return [totalCount, totalSize];
+    } catch (e) {
+      return [0,0];
+    }
+  }
+
+
   public static get Instance() {
     if (this.instance) {
       return this.instance;

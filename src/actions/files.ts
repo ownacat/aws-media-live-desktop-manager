@@ -4,6 +4,7 @@ import awsMediaStore from 'api/awsMediaStore';
 
 export type FileItem = Omit<Item, 'LastModified'> & {
   LastModified: string;
+  fileCount?: number;
 };
 
 function normalizeItem(item: Item): FileItem {
@@ -18,6 +19,13 @@ export const fetchFilesByPath = createAsyncThunk<FileItem[], string>(
   async (path: string) => {
     const files = await awsMediaStore.getFiles(path);
     return files.map(normalizeItem);
+  }
+);
+
+export const calculateFolderSizeByPath = createAsyncThunk<number[], string>(
+  'files/calculateFolderSizeByPath',
+  async (path: string) => {
+    return await awsMediaStore.caluculateSizeByPath(path);
   }
 );
 
