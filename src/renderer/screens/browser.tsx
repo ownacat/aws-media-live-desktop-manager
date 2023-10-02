@@ -7,7 +7,9 @@ import CalculateFolderSize from 'renderer/components/calulate.size';
 import CurrentPath from 'renderer/components/currentPath';
 import FolderIcon from 'renderer/components/folderIcon';
 import Loader from 'renderer/components/loader';
+import VideoModal from 'renderer/components/modal.video';
 import OrderDirection from 'renderer/components/orderDirection';
+import PlayVideo from 'renderer/components/play.video';
 import {
   filesSelector,
   isLoadingSelector,
@@ -26,25 +28,20 @@ export default function Browser() {
     dispatch(fetchFilesByPath('/'));
   }, [dispatch]);
 
-
   const filteredFiles = useMemo(() => {
     if (!searchFilter) {
       return files;
     }
 
     return files.filter((file) => {
-      if(searchFilter[0] === '/' && file.Name){
-        try{
-        if(file.Name.match(new RegExp(searchFilter.slice(1)))  === null  ){
+      if (searchFilter[0] === '/' && file.Name) {
+        try {
+          if (file.Name.match(new RegExp(searchFilter.slice(1))) === null) {
             return null;
-        }
-      }catch(e){
-
-      }
-
-
-      }else if(file.Name){
-        if(!file.Name.includes(searchFilter)) {
+          }
+        } catch (e) {}
+      } else if (file.Name) {
+        if (!file.Name.includes(searchFilter)) {
           return null;
         }
       }
@@ -61,17 +58,16 @@ export default function Browser() {
     }
   };
 
-
   const renderFileSize = (file: FileItem) => {
-    return <>
-      {prettyBytes(file.ContentLength as number)}
-      {file.fileCount ? <> ({file.fileCount} files)</> : null}
-    </>
-  }
+    return (
+      <>
+        {prettyBytes(file.ContentLength as number)}
+        {file.fileCount ? <> ({file.fileCount} files)</> : null}
+      </>
+    );
+  };
 
   const renderFileRow = (file: FileItem) => {
-    
-
     return (
       <tr
         key={file.Type === 'FOLDER' ? file.Name : file.ETag}
@@ -79,16 +75,26 @@ export default function Browser() {
       >
         <td className="px-6 py-4 flex space-x-1 items-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
           {file.Type === 'FOLDER' ? (
-            <FolderIcon path={file.Name as string} onClick={() => {
-              setSearchFilter(null);
-            }} />
+            <FolderIcon
+              path={file.Name as string}
+              onClick={() => {
+                setSearchFilter(null);
+              }}
+            />
           ) : null}
           <span>{file.Name}</span>
         </td>
         <td className="px-6 py-4">
-          {file.ContentLength ? renderFileSize(file) : <CalculateFolderSize path={file.Name as string} />}
+          {file.ContentLength ? (
+            renderFileSize(file)
+          ) : (
+            <CalculateFolderSize path={file.Name as string} />
+          )}
         </td>
         <td className="px-6 py-4">{file.LastModified}</td>
+        <td className="px-6 py-4">
+          <PlayVideo path={file.Name as string} />
+        </td>
       </tr>
     );
   };
@@ -103,6 +109,7 @@ export default function Browser() {
 
   return (
     <>
+      <VideoModal />
       <div className="grid grid-cols-4 gap-4 m-1">
         <div className="col-span-3">
           <CurrentPath />
@@ -157,7 +164,8 @@ export default function Browser() {
             <tr>
               <th scope="col" className="px-6 py-3">
                 <div className="items-center flex w-full">
-                  <span>Filename ({filteredFiles.length})</span> <OrderDirection field="name" />
+                  <span>Filename ({filteredFiles.length})</span>{' '}
+                  <OrderDirection field="name" />
                 </div>
               </th>
               <th scope="col" className="px-6 py-3  ">
@@ -167,6 +175,9 @@ export default function Browser() {
               </th>
               <th scope="col" className="px-6 py-3  ">
                 Last Modified
+              </th>
+              <th scope="col" className="px-6 py-3  ">
+                Actions
               </th>
             </tr>
           </thead>
