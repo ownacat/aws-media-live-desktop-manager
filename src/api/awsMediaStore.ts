@@ -102,23 +102,25 @@ class AwsMediaStore {
         // eslint-disable-next-line no-await-in-loop
         response = await this.client.send(command);
         if (response.Items) {
-          for (let i = 0; i < response.Items.length; i++) {
+          for (let i = 0; i < response.Items.length; i += 1) {
             if (response.Items[i].Type === 'FOLDER') {
               const newPath = `${path}/${response.Items[i].Name}`;
-              const [folderSize, folderCount] = await this.caluculateSizeByPath(
+              const [folderCount, folderSize] = await this.caluculateSizeByPath(
                 newPath
               );
+
               if (folderCount) {
                 totalSize += folderSize;
                 totalCount += folderCount;
               }
-            } else if (response.Items[i].ContentLength) {
+            } else if (response.Items[i].Type === 'OBJECT') {
               totalSize += response.Items[i].ContentLength as number;
               totalCount += 1;
             }
           }
-          await new Promise((resolve) => setTimeout(resolve, 500));
+          // await new Promise((resolve) => setTimeout(resolve, 500));
         }
+        console.log('500 items');
       } while (response && response.NextToken);
 
       return [totalCount, totalSize];
@@ -134,13 +136,19 @@ class AwsMediaStore {
 
     const files = await this.getAllFilesByPath(path);
     let deleted = 0;
+    let promises = [];
     for (let i = 0; i < files.length; i += 1) {
       console.log('deleting: ', files[i].path);
       const command = new DeleteObjectCommand({
         Path: files[i].path,
       });
-      // await delay(10);
-      await this.client.send(command);
+      promises.push(this.client.send(command));
+      if (i % 100 === 0) {
+        await Promise.all(promises);
+        await delay(100);
+        promises = [];
+        console.log('first 100 deleted');
+      }
       deleted += 1;
     }
 
@@ -159,7 +167,7 @@ class AwsMediaStore {
         };
         const command = new ListItemsCommand(input);
         // eslint-disable-next-line no-await-in-loop
-        await delay(500);
+        // await delay(500);
         // eslint-disable-next-line no-await-in-loop
         response = await this.client.send<
           ListItemsCommandInput,

@@ -49,8 +49,6 @@ export default function PlayVideo({ path }: { path: string }) {
   }
 
   function show() {
-    console.log(path);
-
     const $modalElement: HTMLElement = document.querySelector(
       `#${VideoModalId}`
     ) as HTMLElement;
@@ -79,7 +77,6 @@ export default function PlayVideo({ path }: { path: string }) {
     initVideo();
   }
 
-  console.log(currentPath);
   // for subpath we don't have play function
   if (currentPath !== '/') {
     return null;
