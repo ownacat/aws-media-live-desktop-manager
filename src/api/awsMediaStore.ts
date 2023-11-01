@@ -6,8 +6,6 @@ import {
   ListItemsCommandInput,
   ListItemsCommandOutput,
   DeleteObjectCommand,
-  DeleteObjectCommandInput,
-  DeleteObjectCommandOutput,
 } from '@aws-sdk/client-mediastore-data';
 import { delay } from 'helpers';
 
@@ -27,11 +25,14 @@ class AwsMediaStore {
 
   private client: MediaStoreDataClient | null = null;
 
+  public endpoint: string | null = null;
+
   public async authenticate(
     secretAccessKey: string,
     accessKeyId: string,
     endpoint: string
   ) {
+    this.endpoint = endpoint;
     this.client = new MediaStoreDataClient({
       credentials: {
         accessKeyId,
@@ -126,27 +127,24 @@ class AwsMediaStore {
     }
   }
 
-  public async deleteFilesByPath(path: string): Promise<number> {
+  public async deleteFilesByPath(path: string): Promise<boolean> {
     if (this.client === null) {
       throw new Error('Not authenticated');
     }
 
     const files = await this.getAllFilesByPath(path);
-    for (let i = 0; i < files.length; i++) {
+    let deleted = 0;
+    for (let i = 0; i < files.length; i += 1) {
+      console.log('deleting: ', files[i].path);
       const command = new DeleteObjectCommand({
         Path: files[i].path,
       });
-      await delay(10);
-      console.log(files[i].path);
-      /* const response = await this.client.send<
-        DeleteObjectCommandInput,
-        DeleteObjectCommandOutput
-      >(command);
-      console.log(response.$metadata);
-      return 0; */
+      // await delay(10);
+      await this.client.send(command);
+      deleted += 1;
     }
 
-    return 0;
+    return deleted === files.length;
   }
 
   private async getAllFilesByPath(path: string): Promise<MSFile[]> {
@@ -177,7 +175,7 @@ class AwsMediaStore {
               files.push({
                 ContentLength: response.Items[i].ContentLength as number,
                 Name: response.Items[i].Name as string,
-                path: `/${path}${response.Items[i].Name}`,
+                path: `${path}/${response.Items[i].Name}`,
               });
             }
           }

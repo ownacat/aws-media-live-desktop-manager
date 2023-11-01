@@ -69,6 +69,7 @@ export default function DeleteFolder({ path }: { path: string }) {
       onClick={() => deleteFiles()}
       className="px-0 py-0 mr-0 mb-0 disabled"
       disabled={state === STATE_LOADING || state === STATE_DELETING}
+      loading={state === STATE_LOADING || state === STATE_DELETING}
     >
       {renderButtonText()}
     </Button.Secondary>

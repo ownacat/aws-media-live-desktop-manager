@@ -113,9 +113,12 @@ const auth = createSlice<FilesState, SliceCaseReducers<FilesState>>({
 
     builder.addCase(deleteFolderSizeByPath.fulfilled, (state, action) => {
       const path = action.meta.arg;
-      state.files = state.files.filter(
-        (file) => !(file.Name === path && file.Type === 'FOLDER')
-      );
+      // if success delete folder  from the list
+      if (action.payload) {
+        state.files = state.files.filter(
+          (file) => !(file.Name === path && file.Type === 'FOLDER')
+        );
+      }
     });
 
     builder.addCase(fetchFilesByPath.pending, (state, action) => {

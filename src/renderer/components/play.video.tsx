@@ -6,7 +6,7 @@ import videojs from 'video.js';
 import { VideoModalId } from './modal.video';
 import 'video.js/dist/video-js.css';
 import { useSelector } from 'react-redux';
-
+import awsMediaStore from 'api/awsMediaStore';
 import { pathSelector } from 'selectors/files';
 
 export default function PlayVideo({ path }: { path: string }) {
@@ -14,6 +14,7 @@ export default function PlayVideo({ path }: { path: string }) {
 
   let player = null;
   function initVideo() {
+    const url = `${awsMediaStore.endpoint}/${path}/index.m3u8`;
     const videoJsOptions = {
       autoplay: true,
       controls: true,
@@ -21,7 +22,7 @@ export default function PlayVideo({ path }: { path: string }) {
       fluid: true,
       sources: [
         {
-          src: `https://d387613w8yyayj.cloudfront.net/${path}/index.m3u8`,
+          src: url,
           type: 'application/x-mpegURL',
         },
       ],
