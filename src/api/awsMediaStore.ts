@@ -1,9 +1,21 @@
+/* eslint-disable no-await-in-loop */
 import {
   MediaStoreDataClient,
   ListItemsCommand,
   Item,
   ListItemsCommandInput,
+  ListItemsCommandOutput,
+  DeleteObjectCommand,
+  DeleteObjectCommandInput,
+  DeleteObjectCommandOutput,
 } from '@aws-sdk/client-mediastore-data';
+import { delay } from 'helpers';
+
+export type MSFile = {
+  path: string;
+  Name: string;
+  ContentLength: number;
+};
 
 function endpointToRegion(endpoint: string): string {
   return endpoint.split('.')[3];
@@ -111,6 +123,70 @@ class AwsMediaStore {
       return [totalCount, totalSize];
     } catch (e) {
       return [0, 0];
+    }
+  }
+
+  public async deleteFilesByPath(path: string): Promise<number> {
+    if (this.client === null) {
+      throw new Error('Not authenticated');
+    }
+
+    const files = await this.getAllFilesByPath(path);
+    for (let i = 0; i < files.length; i++) {
+      const command = new DeleteObjectCommand({
+        Path: files[i].path,
+      });
+      await delay(10);
+      console.log(files[i].path);
+      /* const response = await this.client.send<
+        DeleteObjectCommandInput,
+        DeleteObjectCommandOutput
+      >(command);
+      console.log(response.$metadata);
+      return 0; */
+    }
+
+    return 0;
+  }
+
+  private async getAllFilesByPath(path: string): Promise<MSFile[]> {
+    let response = null;
+    let files: MSFile[] = [];
+    try {
+      do {
+        const input: ListItemsCommandInput = {
+          MaxResults: 500,
+          Path: path,
+          NextToken: response?.NextToken ?? undefined,
+        };
+        const command = new ListItemsCommand(input);
+        // eslint-disable-next-line no-await-in-loop
+        await delay(500);
+        // eslint-disable-next-line no-await-in-loop
+        response = await this.client.send<
+          ListItemsCommandInput,
+          ListItemsCommandOutput
+        >(command);
+        if (response.Items) {
+          for (let i = 0; i < response.Items.length; i += 1) {
+            if (response.Items[i].Type === 'FOLDER') {
+              const newPath = `${path}/${response.Items[i].Name}`;
+              const localFiles = await this.getAllFilesByPath(newPath);
+              files = files.concat(localFiles);
+            } else if (response.Items[i].Type === 'OBJECT') {
+              files.push({
+                ContentLength: response.Items[i].ContentLength as number,
+                Name: response.Items[i].Name as string,
+                path: `/${path}${response.Items[i].Name}`,
+              });
+            }
+          }
+        }
+      } while (response && response.NextToken);
+
+      return files;
+    } catch (e) {
+      return [];
     }
   }
 

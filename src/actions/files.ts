@@ -29,4 +29,11 @@ export const calculateFolderSizeByPath = createAsyncThunk<number[], string>(
   }
 );
 
+export const deleteFolderSizeByPath = createAsyncThunk<number, string>(
+  'files/deleteFolderSizeByPath',
+  async (path: string) => {
+    return await awsMediaStore.deleteFilesByPath(path);
+  }
+);
+
 export default null;

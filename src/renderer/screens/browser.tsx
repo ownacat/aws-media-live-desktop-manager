@@ -5,6 +5,7 @@ import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CalculateFolderSize from 'renderer/components/calulate.size';
 import CurrentPath from 'renderer/components/currentPath';
+import DeleteFolder from 'renderer/components/delete.folder';
 import FolderIcon from 'renderer/components/folderIcon';
 import Loader from 'renderer/components/loader';
 import VideoModal from 'renderer/components/modal.video';
@@ -94,6 +95,7 @@ export default function Browser() {
         <td className="px-6 py-4">{file.LastModified}</td>
         <td className="px-6 py-4">
           <PlayVideo path={file.Name as string} />
+          <DeleteFolder path={file.Name as string} />
         </td>
       </tr>
     );

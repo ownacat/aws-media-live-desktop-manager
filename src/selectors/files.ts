@@ -7,6 +7,9 @@ export const isLoadingSelector = (state: RootState): boolean =>
 export const filesSelector = (state: RootState): FileItem[] =>
   state.files.files;
 
+export const fileSelector = (state: RootState, path: string): FileItem | null =>
+  state.files.files.filter((file) => file.Name === path)[0] ?? null;
+
 export const pathSelector = (state: RootState): string => state.files.path;
 
 export const totalFilesInPathSelector = (state: RootState): number =>
