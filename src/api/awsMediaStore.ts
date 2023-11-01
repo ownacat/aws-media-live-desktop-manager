@@ -15,6 +15,8 @@ export type MSFile = {
   ContentLength: number;
 };
 
+const deleteRequestsPerSecondLimit = 100;
+
 function endpointToRegion(endpoint: string): string {
   return endpoint.split('.')[3];
 }
@@ -100,6 +102,7 @@ class AwsMediaStore {
         };
         const command = new ListItemsCommand(input);
         // eslint-disable-next-line no-await-in-loop
+        await delay(100);
         response = await this.client.send(command);
         if (response.Items) {
           for (let i = 0; i < response.Items.length; i += 1) {
@@ -118,7 +121,6 @@ class AwsMediaStore {
               totalCount += 1;
             }
           }
-          // await new Promise((resolve) => setTimeout(resolve, 500));
         }
         console.log('500 items');
       } while (response && response.NextToken);
@@ -143,13 +145,18 @@ class AwsMediaStore {
         Path: files[i].path,
       });
       promises.push(this.client.send(command));
-      if (i % 100 === 0) {
+      if (i % deleteRequestsPerSecondLimit === 0) {
         await Promise.all(promises);
-        await delay(100);
+        await delay(1000);
         promises = [];
         console.log('first 100 deleted');
       }
       deleted += 1;
+    }
+
+    if (promises.length > 0) {
+      await Promise.all(promises);
+      console.log(promises.length, ' deleted');
     }
 
     return deleted === files.length;
@@ -166,8 +173,7 @@ class AwsMediaStore {
           NextToken: response?.NextToken ?? undefined,
         };
         const command = new ListItemsCommand(input);
-        // eslint-disable-next-line no-await-in-loop
-        // await delay(500);
+        await delay(100);
         // eslint-disable-next-line no-await-in-loop
         response = await this.client.send<
           ListItemsCommandInput,
